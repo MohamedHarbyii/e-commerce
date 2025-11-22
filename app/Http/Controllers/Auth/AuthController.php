@@ -52,7 +52,7 @@ private function TokenInFile(User $user,$token){
 
         $user = UserController::FindByEmail($request->email);
 
-
+       
 
 
 

@@ -8,10 +8,12 @@
     "require": {
         "php": "^8.2",
         "darkaonline/l5-swagger": "^9.0",
+        "laravel/cashier": "^16.0",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.2",
         "laravel/socialite": "^5.23",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "moneyphp/money": "^4.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

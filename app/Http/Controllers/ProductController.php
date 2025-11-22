@@ -17,12 +17,12 @@ use Nette\Utils\Image;
 
 class ProductController extends Controller
 {
-use Messages;
+    use Messages;
     public function index()
     {
 
         $products = Product::with('images')->lazy();
-      return $this->success_message( ProductResource::collection($products), 'products retrieved successfully', 200);
+        return $this->success_message( ProductResource::collection($products), 'products retrieved successfully', 200);
     }
 
 
@@ -37,19 +37,24 @@ use Messages;
         if($request->hasFile('images'))
         {
             $images=FileController::storeMultiple($request->file('images'),'images/products');
-            ProductImageController::store($product,$images);
+            $product->images=$images;
+            $product->save();
         }
 
-       $product->load('images');
-       return $this->success_message(new ProductResource($product), 'product created successfully', 201);
+
+        return $this->success_message(new ProductResource($product), 'product created successfully', 201);
     }
+
 
 
     public function show(Product $product)
     {
 
-         $product->load('images');
+
         return $this->success_message(new ProductResource($product),'product found successfully',200);
+    }
+    public static function find($id){
+        return Product::find($id);
     }
 
 
@@ -59,14 +64,16 @@ use Messages;
 
 
 
-           $data['image']=FileController::updateFile($request->file('main_image'),$product->image,'images/products');
-           if($request->hasFile('images')){
-               $oldImages=  ProductImageController::LoadProductImages($product);
-               $images=FileController::updateMultiple($request->file('images'),
-                 $oldImages
-                   ,'images/products');
-               ProductImageController::update($product,$images);
-           }
+        $data['image']=FileController::updateFile($request->file('main_image'),$product->image,'images/products');
+        if($request->hasFile('images')){
+            $oldImages=  $product->images;
+
+            $images=FileController::updateMultiple(
+                $request->file('images'),
+                $oldImages,
+                'images/products');
+           $data['images']=$images;
+        }
 
         $product->update($data);
 
@@ -79,10 +86,15 @@ use Messages;
     public function destroy(Product $product)
     {
 
-        $images= ProductImageController::LoadProductImages($product);
+
         $product->delete();
         FileController::deleteFile($product->image,'images/products');//delete the main image
-        FileController::deleteAllFiles($images,'images/products');//delete the sub images
-       return $this->success_message(null, 'product deleted successfully', 200);
+        FileController::deleteAllFiles($product->images,'images/products');//delete the sub images
+        return $this->success_message(null, 'product deleted successfully', 200);
+    }
+    public static function updateStock($newStock,$product)
+    {
+
+        $product->update(['stock'=>$product->stock-$newStock]);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Files\ImageController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\UserController;
 
 use Illuminate\Http\Request;
@@ -23,7 +23,6 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
 });
 
-Route::apiResource('products/images', ProductImageController::class);
 Route::apiResource('category', CategoryController::class)->missing(function(){
 
     return response()->json(['data'=>null,'message'=>'category not found'],404);
@@ -35,4 +34,7 @@ Route::apiResource('users', UserController::class)->missing(function(){
 Route::apiResource('products', ProductController::class)->missing(function(){
     return response()->json(['data'=>null,'message'=>'product not found'],404);
 });
-
+Route::apiResource('carts', CartItemController::class)->missing(function(){
+    return response()->json(['message'=>'cart not found'],200);
+});
+require __DIR__.'/payment.php';

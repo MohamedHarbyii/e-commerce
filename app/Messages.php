@@ -4,12 +4,23 @@ namespace App;
 
 trait Messages
 {
- public  function success_message($data,$message,$status)
- {
-     return response()->json(['data'=>$data,'message'=>$message],$status);
- }
-    public static function error_message($data,$message,$status)
+    public function success_message($data = [], $message = 'Operation Successful', $code = 200)
     {
-        return response()->json(['data'=>$data,'message'=>$message],$status);
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'data' => $data,
+        ], $code);
+    }
+
+    /**
+     * رد الخطأ الموحد
+     */
+    public function error_message($message = 'Something went wrong', $code = 400)
+    {
+        return response()->json([
+            'status' => false,
+            'message' => $message,
+        ], $code);
     }
 }

@@ -22,8 +22,8 @@ class ProductResource extends JsonResource
            'price'=>$this->price,
            'stock'=>$this->stock,
            'main image'=>url('storage/images/products/'.$this->image),
-           'images'=>ImageResource::collection($this->whenLoaded('images')),
-//             'images'=>null,
+           'images'=>$this->images,
+//
        ];
     }
 }

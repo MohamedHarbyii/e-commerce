@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\Rules\Enum;
+use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable,Billable;
 
     /**
      * The attributes that are mass assignable.
@@ -52,10 +53,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function post(){
-        return $this->hasMany(Post::class);
-    }
-    public function comment(){
-        return $this->hasMany(Comment::class);
-    }
+ public function cart_item(){
+        return $this->hasMany(CartItem::class);
+ }
 }

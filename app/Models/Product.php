@@ -16,13 +16,15 @@ class Product extends Model
         'price',
         'stock',
         'image',
+        'images'
     ];
+    protected $casts=['images'=>'array'];
     public function category()
     {
         return $this->belongsToMany(Category::class, 'category_product',
             'product_id', 'category_id'    );
     }
-    public function images(){
-        return $this->hasMany(Product_Image::class, 'product_id', 'id');
-    }
+//    public function images(){
+//        return $this->hasMany(Product_Image::class, 'product_id', 'id');
+//    }
 }
